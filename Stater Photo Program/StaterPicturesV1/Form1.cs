@@ -365,14 +365,6 @@ namespace StaterOrganizer
                             }
                             label1.Text = "Barcode Does Not Exist.";
                         }
-                        if (listBox1.Items.Count > 1)
-                        {
-                            listBox1.SelectedIndex = listBox1.Items.Count - 2;
-                        }
-                        else
-                        {
-                            listBox1.SelectedIndex = listBox1.Items.Count - 1;
-                        }
                         Picture.Focus();
                         Picture.SelectionStart = Picture.Text.Length + 1;
                     }
@@ -384,15 +376,7 @@ namespace StaterOrganizer
                 {
                     if (e.KeyValue == (char)Keys.Return)
                     {
-                        TextWriter tw = new StreamWriter("FailSafeStaterPhoto.txt");
                         bool staterFound = false;
-                        String[] fs = Picture.Text.Split(_separators, StringSplitOptions.RemoveEmptyEntries);
-                        for (int i = 0; i < fs.Length; i++)
-                        {
-                            tw.WriteLine(fs[i]);
-                        }
-                        tw.Close();
-
                         for (int j = 0; j < pictureBarcodes.Count; j++)
                         {
                             for (int i = 0; i < staters.Count; i++)
@@ -432,14 +416,6 @@ namespace StaterOrganizer
                                 Picture.Text += Pic.ToString() + "\n";
                             }
                             label1.Text = "Barcode Does Not Exist.";
-                        }
-                        if (listBox1.Items.Count > 1)
-                        {
-                            listBox1.SelectedIndex = listBox1.Items.Count - 2;
-                        }
-                        else
-                        {
-                            listBox1.SelectedIndex = listBox1.Items.Count - 1;
                         }
                         Picture.Focus();
                         Picture.SelectionStart = Picture.Text.Length + 1;
@@ -584,6 +560,7 @@ namespace StaterOrganizer
         {
             Picture.Text = "";
             listBox1.Items.Clear();
+            listBox1.SelectionMode = SelectionMode.None;
             programRunning = "City Photos";
             this.Text = programRunning;
             error = false;
@@ -657,6 +634,7 @@ namespace StaterOrganizer
             listBox1.Items.Clear();
             error = false;
             programRunning = "Individual Stater Photos";
+            listBox1.SelectionMode = SelectionMode.None;
             this.Text = programRunning;
             this.Controls.Remove(b);
             this.Controls.Remove(c);
@@ -689,6 +667,7 @@ namespace StaterOrganizer
             listBox1.Items.Clear();
             error = false;
             programRunning = "Stater Registration";
+            listBox1.SelectionMode = SelectionMode.One;
             this.Text = programRunning;
             this.Controls.Remove(b);
             this.Controls.Remove(c);
