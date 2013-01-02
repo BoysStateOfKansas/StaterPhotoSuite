@@ -351,6 +351,7 @@ namespace StaterOrganizer
                                     else
                                     {
                                         workSaved = false;
+                                        createBackup();
                                     }
                                     break;
                                 }
@@ -1085,6 +1086,36 @@ namespace StaterOrganizer
                 return false;
             }
 
+        }
+
+        //Create backup
+        private void createBackup()
+        {
+            string path = Directory.GetCurrentDirectory();
+            string pathString = System.IO.Path.Combine(path, "backUp.txt");
+            FileStream fs = File.Create(pathString);
+            fs.Close();
+            if (programRunning == "City Photos" && programRunning == "Individual Stater Photos")
+            {
+                using (StreamWriter writer = new StreamWriter(pathString, true))
+                {
+                    writer.WriteLine(programRunning);
+                    writer.WriteLine("pictureBarcodes");
+                    foreach (int Pin in pictureBarcodes)
+                    {
+                        writer.WriteLine(Pin);
+                    }
+                    writer.WriteLine("staterList");
+                    foreach (Object Stater in listBox1.Items)
+                    {
+                        writer.WriteLine(Stater.ToString());
+                    }
+                }
+            }
+            else
+            {
+
+            }
         }
     }
 }
