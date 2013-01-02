@@ -31,6 +31,7 @@ namespace StaterOrganizer
         //booleans for error and user stability
         private bool SNPhasBeenLoaded = false;
         private bool error = false;
+        private bool workSaved = true;
         //program that is running
         private String programRunning = "";
         //CheckBoxes for the activities functions
@@ -116,6 +117,7 @@ namespace StaterOrganizer
                             }
                             Picture.Text = "";
                             label1.Text = "Picture Roster Has Been Created.";
+                            workSaved = true;
                             listBox1.Items.Clear();
                             Picture.Focus();
                         }
@@ -346,6 +348,10 @@ namespace StaterOrganizer
                                         }
                                         label1.Text = "Barcode has already been entered.";
                                     }
+                                    else
+                                    {
+                                        workSaved = false;
+                                    }
                                     break;
                                 }
                                 else
@@ -397,6 +403,10 @@ namespace StaterOrganizer
                                             Picture.Text += Pic.ToString() + "\n";
                                         }
                                         label1.Text = "Barcode has already been entered.";
+                                    }
+                                    else
+                                    {
+                                        workSaved = false;
                                     }
                                     break;
                                 }
@@ -459,6 +469,10 @@ namespace StaterOrganizer
                                             Picture.Text += Pic.ToString() + "\n";
                                         }
                                         label1.Text = "Barcode has already been entered.";
+                                    }
+                                    else
+                                    {
+                                        workSaved = false;
                                     }
                                     break;
 
@@ -558,168 +572,214 @@ namespace StaterOrganizer
         //Method to Load SNP for City Photos
         private void createSNPFromcsvToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Picture.Text = "";
-            listBox1.Items.Clear();
-            listBox1.SelectionMode = SelectionMode.None;
-            programRunning = "City Photos";
-            this.Text = programRunning;
-            error = false;
-            this.Controls.Remove(b);
-            this.Controls.Remove(c);
-            this.Controls.Remove(t);
-            this.Controls.Remove(band);
-            this.Controls.Remove(chorus);
-            this.Controls.Remove(talent);
-            this.Controls.Remove(activities);
-            this.Size = new Size(282, 326);
-            Picture.Text = "";
-            listBox1.Items.Clear();
-            Picture.Focus();
-            staters.Clear();
-            string pathstring = loadStaterList();
-            CsvFileReader csv = new CsvFileReader(pathstring);
-            char[] _separators = new char[] { '\n', '"', ',' };
-            CsvRow row = new CsvRow();
-            bool entering = true;
-            while (entering == true)
+            bool run = true;
+            if (!workSaved)
             {
-                entering = csv.ReadRow(row);
-                if (row.Count != 5)
+                if (MessageBox.Show("Do you want to switch menus without saving?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    label1.Size = new Size(200, 30);
-                    label1.Location = new Point(50, 20);
-                    label1.Text = pathstring + " invalid format;\nCorrect Format: First Name, Last Name, Barcode";
-                    error = true;
-
+                    run = true;
+                    workSaved = true;
                 }
-                staters.Add(new Stater(row[1], row[2]));
-                char[] bar = row[0].ToCharArray();
-                string bs = Convert.ToString(bar[0]) + Convert.ToString(bar[1]) + Convert.ToString(bar[2]) + Convert.ToString(bar[3]);
-                staters[staters.Count - 1].Barcode = Convert.ToInt32(bs);
-                staters[staters.Count - 1].City = row[3];
-                if (staters.Count()>1 && staters[staters.Count - 1].Barcode == staters[staters.Count - 2].Barcode)
+                else
                 {
-                    staters.RemoveAt(staters.Count - 1);
-                    break;
+                    run = false;
                 }
             }
-            csv.Close();
-            rows();
-            SNPhasBeenLoaded = true;
-            checkStaterList();
-            if (error == false)
+            if (run)
             {
-                label1.Size = new Size(130, 30);
-                label1.Location = new Point(76, 17);
-                label1.Text = "Stater list successfully loaded.";
-
-                Picture.Enabled = true;
-                button1.Enabled = true;
+                Picture.Text = "";
+                listBox1.Items.Clear();
+                listBox1.SelectionMode = SelectionMode.None;
+                programRunning = "City Photos";
+                this.Text = programRunning;
+                error = false;
+                this.Controls.Remove(b);
+                this.Controls.Remove(c);
+                this.Controls.Remove(t);
+                this.Controls.Remove(band);
+                this.Controls.Remove(chorus);
+                this.Controls.Remove(talent);
+                this.Controls.Remove(activities);
+                this.Size = new Size(282, 326);
+                Picture.Text = "";
+                listBox1.Items.Clear();
                 Picture.Focus();
-            }
-            else
-            {
-                label1.Size = new Size(130, 30);
-                label1.Location = new Point(76, 17);
-                label1.Text = "SNP Contains an Error";
-            }
+                staters.Clear();
+                string pathstring = loadStaterList();
+                CsvFileReader csv = new CsvFileReader(pathstring);
+                char[] _separators = new char[] { '\n', '"', ',' };
+                CsvRow row = new CsvRow();
+                bool entering = true;
+                while (entering == true)
+                {
+                    entering = csv.ReadRow(row);
+                    if (row.Count != 5)
+                    {
+                        label1.Size = new Size(200, 30);
+                        label1.Location = new Point(50, 20);
+                        label1.Text = pathstring + " invalid format;\nCorrect Format: First Name, Last Name, Barcode";
+                        error = true;
 
+                    }
+                    staters.Add(new Stater(row[1], row[2]));
+                    char[] bar = row[0].ToCharArray();
+                    string bs = Convert.ToString(bar[0]) + Convert.ToString(bar[1]) + Convert.ToString(bar[2]) + Convert.ToString(bar[3]);
+                    staters[staters.Count - 1].Barcode = Convert.ToInt32(bs);
+                    staters[staters.Count - 1].City = row[3];
+                    if (staters.Count() > 1 && staters[staters.Count - 1].Barcode == staters[staters.Count - 2].Barcode)
+                    {
+                        staters.RemoveAt(staters.Count - 1);
+                        break;
+                    }
+                }
+                csv.Close();
+                rows();
+                SNPhasBeenLoaded = true;
+                checkStaterList();
+                if (error == false)
+                {
+                    label1.Size = new Size(130, 30);
+                    label1.Location = new Point(76, 17);
+                    label1.Text = "Stater list successfully loaded.";
 
+                    Picture.Enabled = true;
+                    button1.Enabled = true;
+                    Picture.Focus();
+                }
+                else
+                {
+                    label1.Size = new Size(130, 30);
+                    label1.Location = new Point(76, 17);
+                    label1.Text = "SNP Contains an Error";
+                }
+            }
         }
 
         //Method to load SNP for Stater Photos
         private void loadSNPForStaterPhotosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Picture.Text = "";
-            listBox1.Items.Clear();
-            error = false;
-            programRunning = "Individual Stater Photos";
-            listBox1.SelectionMode = SelectionMode.None;
-            this.Text = programRunning;
-            this.Controls.Remove(b);
-            this.Controls.Remove(c);
-            this.Controls.Remove(t);
-            this.Controls.Remove(band);
-            this.Controls.Remove(chorus);
-            this.Controls.Remove(talent);
-            this.Controls.Remove(activities);
-            this.Size = new Size(282, 326);
-            Picture.Text = "";
-            listBox1.Items.Clear();
-            Picture.Focus();
-            staters.Clear();
-            createStaterObjects();
-            if (error == false)
+            bool run = true;
+            if (!workSaved)
             {
-                label1.Size = new Size(130, 30);
-                label1.Location = new Point(76, 17);
-                label1.Text = "Stater list successfully loaded.";
-                Picture.Enabled = true;
-                button1.Enabled = true;
+                if (MessageBox.Show("Do you want to switch menus without saving?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    run = true;
+                    workSaved = true;
+                }
+                else
+                {
+                    run = false;
+                }
+            }
+            if (run)
+            {
+                Picture.Text = "";
+                listBox1.Items.Clear();
+                error = false;
+                programRunning = "Individual Stater Photos";
+                listBox1.SelectionMode = SelectionMode.None;
+                this.Text = programRunning;
+                this.Controls.Remove(b);
+                this.Controls.Remove(c);
+                this.Controls.Remove(t);
+                this.Controls.Remove(band);
+                this.Controls.Remove(chorus);
+                this.Controls.Remove(talent);
+                this.Controls.Remove(activities);
+                this.Size = new Size(282, 326);
+                Picture.Text = "";
+                listBox1.Items.Clear();
                 Picture.Focus();
+                staters.Clear();
+                createStaterObjects();
+                if (error == false)
+                {
+                    label1.Size = new Size(130, 30);
+                    label1.Location = new Point(76, 17);
+                    label1.Text = "Stater list successfully loaded.";
+                    Picture.Enabled = true;
+                    button1.Enabled = true;
+                    Picture.Focus();
+                }
             }
         }
 
         //Method to load SNP for Activities Registration
         private void loadSNPForActivitiesRegistrationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Picture.Text = "";
-            listBox1.Items.Clear();
-            error = false;
-            programRunning = "Stater Registration";
-            listBox1.SelectionMode = SelectionMode.One;
-            this.Text = programRunning;
-            this.Controls.Remove(b);
-            this.Controls.Remove(c);
-            this.Controls.Remove(t);
-            this.Controls.Remove(band);
-            this.Controls.Remove(chorus);
-            this.Controls.Remove(talent);
-            this.Controls.Remove(activities);
-            this.Size = new Size(282, 326);
-            Picture.Text = "";
-            label1.Text = "Activity Spread Sheets Have Been Created.";
-            listBox1.Items.Clear();
-            Picture.Focus();
-            setUpCheckBoxes();
-            staters.Clear();
-            string pathstring = loadStaterList();
-            CsvFileReader csv = new CsvFileReader(pathstring);
-            char[] _separators = new char[] { '\n', '"', ',' };
-            CsvRow row = new CsvRow();
-            bool entering = true;
-            while (entering == true)
+            bool run = true;
+            if (!workSaved)
             {
-                entering = csv.ReadRow(row);
-                if (row.Count != 5)
+                if (MessageBox.Show("Do you want to switch menus without saving?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    label1.Size = new Size(200, 30);
-                    label1.Location = new Point(50, 20);
-                    label1.Text = pathstring + " invalid format;\nCorrect Format: First Name, Last Name, Barcode";
-                    error = true;
-
+                    run = true;
+                    workSaved = true;
                 }
-                staters.Add(new Stater(row[1], row[2]));
-                char[] bar = row[0].ToCharArray();
-                string bs = Convert.ToString(bar[0]) + Convert.ToString(bar[1]) + Convert.ToString(bar[2]) + Convert.ToString(bar[3]);
-                staters[staters.Count - 1].Barcode = Convert.ToInt32(bs);
-                staters[staters.Count - 1].City = row[3];
-                staters[staters.Count - 1].County = row[4];
+                else
+                {
+                    run = false;
+                }
             }
-
-            csv.Close();
-
-            SNPhasBeenLoaded = true;
-
-            if (error == false)
+            if (run)
             {
-                label1.Size = new Size(130, 30);
-                label1.Location = new Point(76, 17);
-                label1.Text = "Stater list successfully loaded.";
-
-                Picture.Enabled = true;
-                button1.Enabled = true;
+                Picture.Text = "";
+                listBox1.Items.Clear();
+                error = false;
+                programRunning = "Stater Registration";
+                listBox1.SelectionMode = SelectionMode.One;
+                this.Text = programRunning;
+                this.Controls.Remove(b);
+                this.Controls.Remove(c);
+                this.Controls.Remove(t);
+                this.Controls.Remove(band);
+                this.Controls.Remove(chorus);
+                this.Controls.Remove(talent);
+                this.Controls.Remove(activities);
+                this.Size = new Size(282, 326);
+                Picture.Text = "";
+                label1.Text = "Activity Spread Sheets Have Been Created.";
+                listBox1.Items.Clear();
                 Picture.Focus();
+                setUpCheckBoxes();
+                staters.Clear();
+                string pathstring = loadStaterList();
+                CsvFileReader csv = new CsvFileReader(pathstring);
+                char[] _separators = new char[] { '\n', '"', ',' };
+                CsvRow row = new CsvRow();
+                bool entering = true;
+                while (entering == true)
+                {
+                    entering = csv.ReadRow(row);
+                    if (row.Count != 5)
+                    {
+                        label1.Size = new Size(200, 30);
+                        label1.Location = new Point(50, 20);
+                        label1.Text = pathstring + " invalid format;\nCorrect Format: First Name, Last Name, Barcode";
+                        error = true;
+
+                    }
+                    staters.Add(new Stater(row[1], row[2]));
+                    char[] bar = row[0].ToCharArray();
+                    string bs = Convert.ToString(bar[0]) + Convert.ToString(bar[1]) + Convert.ToString(bar[2]) + Convert.ToString(bar[3]);
+                    staters[staters.Count - 1].Barcode = Convert.ToInt32(bs);
+                    staters[staters.Count - 1].City = row[3];
+                    staters[staters.Count - 1].County = row[4];
+                }
+
+                csv.Close();
+
+                SNPhasBeenLoaded = true;
+
+                if (error == false)
+                {
+                    label1.Size = new Size(130, 30);
+                    label1.Location = new Point(76, 17);
+                    label1.Text = "Stater list successfully loaded.";
+
+                    Picture.Enabled = true;
+                    button1.Enabled = true;
+                    Picture.Focus();
+                }
             }
         }
 
