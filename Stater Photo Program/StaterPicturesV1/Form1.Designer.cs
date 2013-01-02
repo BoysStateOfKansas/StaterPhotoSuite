@@ -34,8 +34,9 @@
             this.createSNPFromcsvToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadSNPForStaterPhotosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadSNPForActivitiesRegistrationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.clearCurrentListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.listToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearCurrentListToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.Picture = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.listBox1 = new System.Windows.Forms.ListBox();
@@ -56,7 +57,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.loadStatersToolStripMenuItem});
+            this.loadStatersToolStripMenuItem,
+            this.listToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(266, 24);
@@ -69,7 +71,6 @@
             this.createSNPFromcsvToolStripMenuItem,
             this.loadSNPForStaterPhotosToolStripMenuItem,
             this.loadSNPForActivitiesRegistrationToolStripMenuItem,
-            this.clearCurrentListToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.loadStatersToolStripMenuItem.Name = "loadStatersToolStripMenuItem";
             this.loadStatersToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -96,19 +97,27 @@
             this.loadSNPForActivitiesRegistrationToolStripMenuItem.Text = "Stater Registration";
             this.loadSNPForActivitiesRegistrationToolStripMenuItem.Click += new System.EventHandler(this.loadSNPForActivitiesRegistrationToolStripMenuItem_Click);
             // 
-            // clearCurrentListToolStripMenuItem
-            // 
-            this.clearCurrentListToolStripMenuItem.Name = "clearCurrentListToolStripMenuItem";
-            this.clearCurrentListToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.clearCurrentListToolStripMenuItem.Text = "Clear Current List";
-            this.clearCurrentListToolStripMenuItem.Click += new System.EventHandler(this.clearCurrentListToolStripMenuItem_Click);
-            // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // listToolStripMenuItem
+            // 
+            this.listToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.clearCurrentListToolStripMenuItem1});
+            this.listToolStripMenuItem.Name = "listToolStripMenuItem";
+            this.listToolStripMenuItem.Size = new System.Drawing.Size(82, 20);
+            this.listToolStripMenuItem.Text = "List Options";
+            // 
+            // clearCurrentListToolStripMenuItem1
+            // 
+            this.clearCurrentListToolStripMenuItem1.Name = "clearCurrentListToolStripMenuItem1";
+            this.clearCurrentListToolStripMenuItem1.Size = new System.Drawing.Size(165, 22);
+            this.clearCurrentListToolStripMenuItem1.Text = "Clear Current List";
+            this.clearCurrentListToolStripMenuItem1.Click += new System.EventHandler(this.clearCurrentListToolStripMenuItem_Click);
             // 
             // Picture
             // 
@@ -121,7 +130,7 @@
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(105, 20);
+            this.label1.Location = new System.Drawing.Point(73, 24);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(130, 30);
             this.label1.TabIndex = 5;
@@ -147,6 +156,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Stater Organizer";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -162,12 +172,13 @@
         private System.Windows.Forms.ToolStripMenuItem loadStatersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.RichTextBox Picture;
-        private System.Windows.Forms.ToolStripMenuItem clearCurrentListToolStripMenuItem;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.ToolStripMenuItem createSNPFromcsvToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadSNPForStaterPhotosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadSNPForActivitiesRegistrationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem listToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clearCurrentListToolStripMenuItem1;
     }
 
 }
