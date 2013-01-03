@@ -36,10 +36,15 @@
             this.loadSNPForActivitiesRegistrationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addStaterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadBackupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearCurrentListToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.staterListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addStaterToStaterListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Picture = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.listBox1 = new System.Windows.Forms.ListBox();
+            this.addPinToListDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -58,7 +63,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadStatersToolStripMenuItem,
-            this.listToolStripMenuItem});
+            this.listToolStripMenuItem,
+            this.staterListToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(266, 24);
@@ -107,17 +113,49 @@
             // listToolStripMenuItem
             // 
             this.listToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addStaterToolStripMenuItem,
+            this.addPinToListDownToolStripMenuItem,
+            this.loadBackupToolStripMenuItem,
             this.clearCurrentListToolStripMenuItem1});
             this.listToolStripMenuItem.Name = "listToolStripMenuItem";
             this.listToolStripMenuItem.Size = new System.Drawing.Size(82, 20);
             this.listToolStripMenuItem.Text = "List Options";
             // 
+            // addStaterToolStripMenuItem
+            // 
+            this.addStaterToolStripMenuItem.Name = "addStaterToolStripMenuItem";
+            this.addStaterToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.addStaterToolStripMenuItem.Text = "Add Pin to list above";
+            this.addStaterToolStripMenuItem.Click += new System.EventHandler(this.addStaterToolStripMenuItem_Click);
+            // 
+            // loadBackupToolStripMenuItem
+            // 
+            this.loadBackupToolStripMenuItem.Name = "loadBackupToolStripMenuItem";
+            this.loadBackupToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.loadBackupToolStripMenuItem.Text = "Load Backup";
+            this.loadBackupToolStripMenuItem.Click += new System.EventHandler(this.loadBackupToolStripMenuItem_Click);
+            // 
             // clearCurrentListToolStripMenuItem1
             // 
             this.clearCurrentListToolStripMenuItem1.Name = "clearCurrentListToolStripMenuItem1";
-            this.clearCurrentListToolStripMenuItem1.Size = new System.Drawing.Size(165, 22);
+            this.clearCurrentListToolStripMenuItem1.Size = new System.Drawing.Size(185, 22);
             this.clearCurrentListToolStripMenuItem1.Text = "Clear Current List";
             this.clearCurrentListToolStripMenuItem1.Click += new System.EventHandler(this.clearCurrentListToolStripMenuItem_Click);
+            // 
+            // staterListToolStripMenuItem
+            // 
+            this.staterListToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addStaterToStaterListToolStripMenuItem});
+            this.staterListToolStripMenuItem.Name = "staterListToolStripMenuItem";
+            this.staterListToolStripMenuItem.Size = new System.Drawing.Size(70, 20);
+            this.staterListToolStripMenuItem.Text = "Stater List";
+            // 
+            // addStaterToStaterListToolStripMenuItem
+            // 
+            this.addStaterToStaterListToolStripMenuItem.Name = "addStaterToStaterListToolStripMenuItem";
+            this.addStaterToStaterListToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.addStaterToStaterListToolStripMenuItem.Text = "Add Stater to Stater List";
+            this.addStaterToStaterListToolStripMenuItem.Click += new System.EventHandler(this.addStaterToStaterListToolStripMenuItem_Click);
             // 
             // Picture
             // 
@@ -142,6 +180,13 @@
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(122, 173);
             this.listBox1.TabIndex = 6;
+            // 
+            // addPinToListDownToolStripMenuItem
+            // 
+            this.addPinToListDownToolStripMenuItem.Name = "addPinToListDownToolStripMenuItem";
+            this.addPinToListDownToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.addPinToListDownToolStripMenuItem.Text = "Add Pin to list below";
+            this.addPinToListDownToolStripMenuItem.Click += new System.EventHandler(this.addPinToListDownToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -179,6 +224,11 @@
         private System.Windows.Forms.ToolStripMenuItem loadSNPForActivitiesRegistrationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem listToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearCurrentListToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem addStaterToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem staterListToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addStaterToStaterListToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadBackupToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addPinToListDownToolStripMenuItem;
     }
 
 }

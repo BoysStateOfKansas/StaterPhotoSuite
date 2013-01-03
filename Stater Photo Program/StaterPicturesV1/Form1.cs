@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using StaterOrganizer.Properties;
+using System.Threading;
 
 
 namespace StaterOrganizer
@@ -22,9 +23,6 @@ namespace StaterOrganizer
         private char[] _separators = new char[] { ' ', '\n' };
         //Lists used to maintain record creation functions
         private List<Stater> staters = new List<Stater>();
-        private List<Stater> bandMembers = new List<Stater>();
-        private List<Stater> chorusMembers = new List<Stater>();
-        private List<Stater> talentShowParticipants = new List<Stater>();
         private List<int> pictureBarcodes = new List<int>();
         //booleans for error and user stability
         private bool SNPhasBeenLoaded = false;
@@ -172,7 +170,7 @@ namespace StaterOrganizer
                     }
                     if (programRunning == "Stater Registration")
                     {
-                        var organizedStaterList = staters.OrderBy(x => x.City).ToList();                  
+                        var organizedStaterList = staters.OrderBy(x => x.City).ToList();
                         #region Creating Band List
                         MySaveFileDialog.DefaultExt = "csv";
                         MySaveFileDialog.FileName = "Band Members";
@@ -186,7 +184,7 @@ namespace StaterOrganizer
                                     {
                                         myWritter.WriteLine("Stater Pin" + "," + "First Name" + "," + "Last Name" + "," + "City" + "," + "County");
 
-                                        foreach( Stater Stater in organizedStaterList)
+                                        foreach (Stater Stater in organizedStaterList)
                                         {
                                             if (Stater.Band)
                                             {
@@ -286,6 +284,7 @@ namespace StaterOrganizer
                     c.Checked = staters[staterIndex].Chorus;
                     t.Checked = staters[staterIndex].Talent;
                     act.Text = staters[staterIndex].Act;
+                    Picture.Focus();
                 }
                 catch
                 {
@@ -301,241 +300,85 @@ namespace StaterOrganizer
         private void listBox1_KeyPress(object sender, KeyEventArgs e)
         {
             List<int> pinsToRemove = new List<int>();
+            bool duplicateDetected = false;
             listBox1.Items.Clear();
-            listBox1.Items.Add(" ");
             workSaved = false;
-            // The keypressed method uses the KeyChar property to check 
-            // whether the ENTER key is pressed. 
 
-            // If the ENTER key is pressed, the Handled property is set to true, 
-            // to indicate the event is handled.
-            loadPictureList();
-            if (programRunning == "City Photos")
+            if (SNPhasBeenLoaded == true)
             {
-                if (SNPhasBeenLoaded == true)
+                if (e.KeyValue == (char)Keys.Return)
                 {
-                    if (e.KeyValue == (char)Keys.Return && pictureBarcodes.Count!=0)
+                    loadPictureList();
+                    if (programRunning == "City Photos" || programRunning == "Individual Stater Photos")
                     {
-                        
-                        bool staterFound = false;
-                        for (int j = 0; j < pictureBarcodes.Count; j++)
+                        Picture.Clear();
+                        listBox1.Items.Clear();
+                        if (checkForDuplicateUserEntry())
                         {
-                            for (int i = 0; i < staters.Count; i++)
+                            duplicateDetected = true;
+                        }
+                        foreach (int pin in pictureBarcodes)
+                        {
+                            int index = staters.FindIndex(x => x.Barcode == pin);
+                            if (index != -1)
                             {
-                                if (staters[i].Barcode == pictureBarcodes[j])
+                                label1.Text = "Stater Found";
+                                if (duplicateDetected)
                                 {
-                                    listBox1.Items.RemoveAt(listBox1.Items.Count - 1);
-                                    listBox1.Items.Add(staters[i].FirstName + " " + staters[i].LastName);
-                                    staterFound = true;
-                                    label1.Text = "Stater Found";
-                                    if (checkForDuplicateUserEntry())
-                                    {
-                                        Picture.Clear();
-                                        listBox1.Items.Clear();
-                                        pictureBarcodes.RemoveAt(pictureBarcodes.Count() - 1);
-                                        foreach (int Pic in pictureBarcodes)
-                                        { 
-                                            int index = staters.FindIndex(x => x.Barcode == Pic);
-                                            if (index != -1)
-                                            {
-                                                Picture.Text += Pic.ToString() + "\n";
-                                                listBox1.Items.Add(staters[index].FirstName + " " + staters[index].LastName);
-                                            }
-                                            else
-                                            {
-                                                pinsToRemove.Add(Pic);
-                                            }
-                                        }
-                                        label1.Text = "Barcode has already been entered.";
-                                    }
-                                    else
-                                    {
-                                        workSaved = false;
-                                        Picture.Clear();
-                                        listBox1.Items.Clear();
-                                        foreach (int Pic in pictureBarcodes)
-                                        {
-                                            int index = staters.FindIndex(x => x.Barcode == Pic);
-                                            if (index != -1)
-                                            {
-                                                Picture.Text += Pic.ToString() + "\n";
-                                                listBox1.Items.Add(staters[index].FirstName + " " + staters[index].LastName);
-                                            }
-                                            else
-                                            {
-                                                pinsToRemove.Add(Pic);
-                                            }
-                                        }
-                                        
-                                        createBackup();
-                                    }
-                                    break;
+                                    label1.Text = "Barcode has already been entered.";
                                 }
-                                else
-                                {
-                                    staterFound = false;
-                                }
+                                listBox1.Items.Add(staters[index].FirstName + " " + staters[index].LastName);
+                                Picture.Text += pin.ToString() + "\n";
+                            }
+                            else
+                            {
+                                label1.Text = "Stater not found for " + pin;
                             }
                         }
-                        e.Handled = true;
-                        if (!staterFound)
-                        {
-                            Picture.Clear();
-                            listBox1.Items.Clear();
-                            foreach (int Pic in pictureBarcodes)
-                            {
-                                int index = staters.FindIndex(x => x.Barcode == Pic);
-                                if (index != -1)
-                                {
-                                    Picture.Text += Pic.ToString() + "\n";
-                                    listBox1.Items.Add(staters[index].FirstName + " " + staters[index].LastName);
-                                }
-                                else
-                                {
-                                    pinsToRemove.Add(Pic);
-                                }
-                            }
-                            label1.Text = "Barcode Does Not Exist.";
-                            Picture.Clear();
-                        }
-                        Picture.Focus();
-                        Picture.SelectionStart = Picture.Text.Length + 1;
-                        foreach (int pin in pinsToRemove)
-                        {
-                            pictureBarcodes.Remove(pin);
-                        }
-                    }
-                }
-            }
-            if (programRunning == "Individual Stater Photos")
-            {
-                if (SNPhasBeenLoaded == true)
-                {
-                    if (e.KeyValue == (char)Keys.Return)
-                    {
-                        bool staterFound = false;
-                        for (int j = 0; j < pictureBarcodes.Count; j++)
-                        {
-                            for (int i = 0; i < staters.Count; i++)
-                            {
-                                if (staters[i].Barcode == pictureBarcodes[j])
-                                {
-                                    listBox1.Items.RemoveAt(listBox1.Items.Count - 1);
-                                    listBox1.Items.Add(staters[i].LastName + " " + staters[i].FirstName);
-                                    listBox1.Items.Add(" ");
-                                    staterFound = true;
-                                    label1.Text = "Stater Found";
-                                    if (checkForDuplicateUserEntry())
-                                    {
-                                        Picture.Clear();
-                                        pictureBarcodes.RemoveAt(pictureBarcodes.Count() - 1);
-                                        foreach (int Pic in pictureBarcodes)
-                                        {
-                                            Picture.Text += Pic.ToString() + "\n";
-                                        }
-                                        label1.Text = "Barcode has already been entered.";
-                                    }
-                                    else
-                                    {
-                                        workSaved = false;
-                                    }
-                                    break;
-                                }
-                                else
-                                {
-                                    staterFound = false;
-                                }
-                            }
-                        }
-                        e.Handled = true;
-                        if (!staterFound)
-                        {
-                            Picture.Clear();
-                            pictureBarcodes.RemoveAt(pictureBarcodes.Count() - 1);
-                            foreach (int Pic in pictureBarcodes)
-                            {
-                                Picture.Text += Pic.ToString() + "\n";
-                            }
-                            label1.Text = "Barcode Does Not Exist.";
-                        }
+                        workSaved = false;
+                        createBackup();
                         Picture.Focus();
                         Picture.SelectionStart = Picture.Text.Length + 1;
                     }
-                }
-            }
-            if (programRunning == "Stater Registration")
-            {
-                if (SNPhasBeenLoaded == true)
-                {
-                    if (e.KeyValue == (char)Keys.Return)
+                    if (programRunning == "Stater Registration")
                     {
-                        bool staterFound = false;
-                        for (int j = 0; j < pictureBarcodes.Count; j++)
+                        Picture.Clear();
+                        listBox1.Items.Clear();
+                        if (checkForDuplicateUserEntry())
                         {
-                            for (int i = 0; i < staters.Count; i++)
+                            duplicateDetected = true;
+                        }
+                        foreach (int pin in pictureBarcodes)
+                        {
+                            int index = staters.FindIndex(x => x.Barcode == pin);
+                            if (index != -1)
                             {
-                                if (staters[i].Barcode == pictureBarcodes[j])
+                                b.Checked = staters[index].Band;
+                                c.Checked = staters[index].Chorus;
+                                t.Checked = staters[index].Talent;
+                                act.Text = staters[index].Act;
+                                label1.Text = "Stater Found";
+                                if (duplicateDetected)
                                 {
-                                    b.Checked = staters[i].Band;
-                                    c.Checked = staters[i].Chorus;
-                                    t.Checked = staters[i].Talent;
-                                    act.Text = staters[i].Act;
-                                    listBox1.Items.RemoveAt(listBox1.Items.Count - 1);
-                                    listBox1.Items.Add(staters[i].FirstName + " " + staters[i].LastName);
-                                    listBox1.Items.Add(" ");
-                                    staterFound = true;
-                                    label1.Text = "Stater Found";
-                                    if (checkForDuplicateUserEntry())
-                                    {
-                                        Picture.Clear();
-                                        pictureBarcodes.RemoveAt(pictureBarcodes.Count() - 1);
-                                        foreach (int Pic in pictureBarcodes)
-                                        {
-                                            Picture.Text += Pic.ToString() + "\n";
-                                        }
-                                        label1.Text = "Barcode has already been entered.";
-                                    }
-                                    else
-                                    {
-                                        createBackup();
-                                        workSaved = false;
-                                    }
-                                    break;
-
+                                    label1.Text = "Barcode has already been entered.";
                                 }
-                                else
-                                {
-                                    staterFound = false;
-                                }
+                                listBox1.Items.Add(staters[index].FirstName + " " + staters[index].LastName);
+                                Picture.Text += pin.ToString() + "\n";
+                            }
+                            else
+                            {
+                                b.Checked = false;
+                                c.Checked = false;
+                                t.Checked = false;
+                                act.Text = "";
+                                label1.Text = "Stater not found for " + pin;
                             }
                         }
-                        e.Handled = true;
-                        if (!staterFound)
-                        {
-                            Picture.Clear();
-                            pictureBarcodes.RemoveAt(pictureBarcodes.Count() - 1);
-                            foreach (int Pic in pictureBarcodes)
-                            {
-                                Picture.Text += Pic.ToString() + "\n";
-                            }
-                            label1.Text = "Barcode Does Not Exist.";
-                        }
-                        if (listBox1.Items.Count > 1)
-                        {
-                            listBox1.SelectedIndex = listBox1.Items.Count - 2;
-                        }
-                        else
-                        {
-                            listBox1.SelectedIndex = listBox1.Items.Count - 1;
-                        }
+                        workSaved = false;
+                        createBackup();
                         Picture.Focus();
                         Picture.SelectionStart = Picture.Text.Length + 1;
-                    }
-                    else
-                    {
-                        b.Checked = false;
-                        c.Checked = false;
-                        t.Checked = false;
+                        listBox1.SelectedIndex = listBox1.Items.Count - 1;
                     }
                 }
             }
@@ -568,7 +411,7 @@ namespace StaterOrganizer
             bool run = true;
             if (!workSaved)
             {
-                if (MessageBox.Show("Do you want to switch menus without saving?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show("Do you want to clear the list without saving?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     run = true;
                     workSaved = true;
@@ -905,6 +748,7 @@ namespace StaterOrganizer
             catch
             {
             }
+            createBackup();
         }
 
         //Event Handler for talent act textbox
@@ -915,13 +759,14 @@ namespace StaterOrganizer
                 Picture.Focus();
                 e.Handled = true;
                 e.SuppressKeyPress = true;
+                createBackup();
             }
         }
 
         //Event Handler for band checkbox
         public void bandBox(object sender, EventArgs e)
         {
-            if (Picture.Text != "" && listBox1.SelectedIndex!=-1)
+            if (Picture.Text != "" && listBox1.SelectedIndex != -1)
             {
                 int pinIndex = listBox1.SelectedIndex;
                 int pin = pictureBarcodes[pinIndex];
@@ -1030,6 +875,7 @@ namespace StaterOrganizer
         //Upload the stater list into the program.
         private void createStaterObjects()
         {
+            staters.Clear();
             string pathstring = loadStaterList();
             CsvFileReader csv = new CsvFileReader(pathstring);
             char[] _separators = new char[] { '\n', '"', ',' };
@@ -1069,8 +915,13 @@ namespace StaterOrganizer
                              .Where(g => g.Count() > 1)
                              .Select(g => g.Key)
                              .ToList();
+
             if (duplicatePins.Count > 0)
             {
+                foreach (int pin in duplicatePins)
+                {
+                    pictureBarcodes.Remove(pin);
+                }
                 return true;
             }
             else
@@ -1086,23 +937,14 @@ namespace StaterOrganizer
             string pathString = System.IO.Path.Combine(path, "backUp.txt");
             FileStream fs = File.Create(pathString);
             fs.Close();
-            if (programRunning == "City Photos" && programRunning == "Individual Stater Photos")
+            if (programRunning == "City Photos" || programRunning == "Individual Stater Photos")
             {
                 using (StreamWriter writer = new StreamWriter(pathString, true))
                 {
                     writer.WriteLine(programRunning);
-                    writer.WriteLine("pictureBarcodes");
                     foreach (int Pin in pictureBarcodes)
                     {
                         writer.WriteLine(Pin);
-                    }
-                    writer.WriteLine("staterList");
-                    foreach (Object Stater in listBox1.Items)
-                    {
-                        if (Stater.ToString() != " ")
-                        {
-                            writer.WriteLine(Stater.ToString());
-                        }
                     }
                 }
             }
@@ -1111,18 +953,9 @@ namespace StaterOrganizer
                 using (StreamWriter writer = new StreamWriter(pathString, true))
                 {
                     writer.WriteLine(programRunning);
-                    writer.WriteLine("pictureBarcodes");
                     foreach (int Pin in pictureBarcodes)
                     {
                         writer.WriteLine(Pin);
-                    }
-                    writer.WriteLine("staterList");
-                    foreach (Object Stater in listBox1.Items)
-                    {
-                        if (Stater.ToString() != " ")
-                        {
-                            writer.WriteLine(Stater.ToString());
-                        }
                     }
                     writer.WriteLine("Band");
                     foreach (int Pin in pictureBarcodes)
@@ -1158,9 +991,192 @@ namespace StaterOrganizer
         //Prevent user from accidently losing work.
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            e.Cancel=true;
+            e.Cancel = true;
             exitToolStripMenuItem_Click(sender, e);
         }
+
+        //Add a stater pin to the list up.
+        private void addStaterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (programRunning != "")
+            {
+                List<String> lines = new List<String>();
+                int cursorPosition = Picture.SelectionStart;
+                int lineIndex = Picture.GetLineFromCharIndex(cursorPosition);
+                for (int i = 0; i < Picture.Lines.Count(); i++)
+                {
+                    if (i == lineIndex)
+                    {
+                        lines.Add("");
+                    }
+                    lines.Add(Picture.Lines[i]);
+                }
+                Picture.Clear();
+                foreach (string pin in lines)
+                {
+                    Picture.Text += pin + "\n";
+                }
+                if (lineIndex == 0)
+                {
+                    Picture.SelectionStart = 0;
+                }
+                else
+                {
+                    Picture.SelectionStart = cursorPosition - 4;
+                }
+            }
+        }
+
+        //Add a stater pin to the list down.
+        private void addPinToListDownToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (programRunning != "")
+            {
+                List<String> lines = new List<String>();
+                int cursorPosition = Picture.SelectionStart;
+                int lineIndex = Picture.GetLineFromCharIndex(cursorPosition);
+                for (int i = 0; i < Picture.Lines.Count(); i++)
+                {
+                    if (i == lineIndex+1)
+                    {
+                        lines.Add("");
+                    }
+                    lines.Add(Picture.Lines[i]);
+                }
+                Picture.Clear();
+                foreach (string pin in lines)
+                {
+                    Picture.Text += pin + "\n";
+                }
+                Picture.SelectionStart = cursorPosition+1;
+            }
+        }
+
+        //Add a stater to the stater list.
+        private void addStaterToStaterListToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            createStaterObjects();
+            Form3 form3 = new Form3();
+            if (form3.ShowDialog() == DialogResult.OK)
+            {
+                staters.Add(new Stater(form3.firstName, form3.lastName));
+                staters[staters.Count - 1].Barcode = form3.pin;
+                staters[staters.Count - 1].City = form3.city;
+                staters[staters.Count - 1].County = form3.county;
+                string filePath = loadStaterList();
+                using (CsvFileWriter writer = new CsvFileWriter(filePath))
+                {
+                    foreach (Stater s in staters)
+                    {
+                        CsvRow row = new CsvRow() { s.Barcode.ToString(), s.FirstName, s.LastName, s.City, s.County };
+                        writer.WriteRow(row);
+                    }
+                }
+                createStaterObjects();
+                if (programRunning != "")
+                {
+                    Picture.Text += form3.pin + "\n";
+                    Picture.Focus();
+                    Picture.SelectionStart = Picture.Text.Length + 1;
+                    SendKeys.Send("{ENTER}");
+                }
+            }
+        }
+
+        //Load backup.
+        private void loadBackupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string path = Directory.GetCurrentDirectory();
+            string pathString = System.IO.Path.Combine(path, "backUp.txt");
+            List<String> readText = File.ReadAllLines(pathString, Encoding.UTF8).ToList();
+            List<String> pins = new List<string>();
+            programRunning = readText[0];
+            Object senders= new Object();
+            EventArgs k = new EventArgs();
+            char[] separators = new char[] { ' ', '\n','$'};
+            switch (programRunning)
+            {
+                case "City Photos":
+                    createSNPFromcsvToolStripMenuItem_Click(senders, k);
+                    readText.Remove(readText[0]);
+                    foreach(String pin in readText)
+                    {
+                        Picture.Text += pin + "\n";
+                    }
+                    Picture.Focus();
+                    Picture.SelectionStart = Picture.Text.Length + 1;
+                    SendKeys.Send("{ENTER}");
+                    break;
+                case "Individual Stater Photos":
+                    loadSNPForStaterPhotosToolStripMenuItem_Click(senders, k);
+                    readText.Remove(readText[0]);
+                    foreach(String pin in readText)
+                    {
+                        Picture.Text += pin + "\n";
+                    }
+                    Picture.Focus();
+                    Picture.SelectionStart = Picture.Text.Length + 1;
+                    SendKeys.Send("{ENTER}");
+                    break;
+                case "Stater Registration":
+                    loadSNPForActivitiesRegistrationToolStripMenuItem_Click(senders, k);
+                    readText.Remove(readText[0]);
+                    int index = readText.FindIndex(x => x == "Band");
+                    for (int i = 0; i < index; i++)
+                    {
+                        Picture.Text += readText[i] + "\n";
+                        pins.Add(readText[i]);
+                    }
+                    foreach (String pin in pins)
+                    {
+                        readText.Remove(pin);
+                    }
+                    readText.Remove(readText[0]);
+                    pins.Clear();
+                    index = readText.FindIndex(x => x == "Chorus");
+                    for (int i = 0; i < index; i++)
+                    {
+                        pins.Add(readText[i]);
+                    }
+                    foreach (String pin in pins)
+                    {
+                        int pinNum = Convert.ToInt32(pin);
+                        int sindex = staters.FindIndex(x => x.Barcode == pinNum);
+                        staters[sindex].Band = true;
+                        readText.Remove(pin);
+                    }
+                    readText.Remove(readText[0]);
+                    pins.Clear();
+                    index = readText.FindIndex(x => x == "Talent");
+                    for (int i = 0; i < index; i++)
+                    {
+                        pins.Add(readText[i]);
+                    }
+                    foreach (String pin in pins)
+                    {
+                        int pinNum = Convert.ToInt32(pin);
+                        int sindex = staters.FindIndex(x => x.Barcode == pinNum);
+                        staters[sindex].Chorus = true;
+                        readText.Remove(pin);
+                    }
+                    readText.Remove(readText[0]);
+                    foreach (String pin in readText)
+                    {
+                        List<String> pieces = pin.Split(separators).ToList();
+                        int pinNum = Convert.ToInt32(pieces[0]);
+                        int sindex = staters.FindIndex(x => x.Barcode == pinNum);
+                        staters[sindex].Talent = true;
+                        staters[sindex].Act = pieces[1];
+                    }
+                    Picture.Focus();
+                    Picture.SelectionStart = Picture.Text.Length + 1;
+
+                    SendKeys.Send("{ENTER}");
+                    break;
+            }
+        }
+
+        
 
     }
 }
