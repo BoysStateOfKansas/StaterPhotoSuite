@@ -1088,95 +1088,95 @@ namespace StaterOrganizer
         {
             string path = Directory.GetCurrentDirectory();
             string pathString = System.IO.Path.Combine(path, "backUp.txt");
-            List<String> readText = File.ReadAllLines(pathString, Encoding.UTF8).ToList();
-            List<String> pins = new List<string>();
-            programRunning = readText[0];
-            Object senders= new Object();
-            EventArgs k = new EventArgs();
-            char[] separators = new char[] { ' ', '\n','$'};
-            switch (programRunning)
+            if (File.Exists(pathString))
             {
-                case "City Photos":
-                    createSNPFromcsvToolStripMenuItem_Click(senders, k);
-                    readText.Remove(readText[0]);
-                    foreach(String pin in readText)
-                    {
-                        Picture.Text += pin + "\n";
-                    }
-                    Picture.Focus();
-                    Picture.SelectionStart = Picture.Text.Length + 1;
-                    SendKeys.Send("{ENTER}");
-                    break;
-                case "Individual Stater Photos":
-                    loadSNPForStaterPhotosToolStripMenuItem_Click(senders, k);
-                    readText.Remove(readText[0]);
-                    foreach(String pin in readText)
-                    {
-                        Picture.Text += pin + "\n";
-                    }
-                    Picture.Focus();
-                    Picture.SelectionStart = Picture.Text.Length + 1;
-                    SendKeys.Send("{ENTER}");
-                    break;
-                case "Stater Registration":
-                    loadSNPForActivitiesRegistrationToolStripMenuItem_Click(senders, k);
-                    readText.Remove(readText[0]);
-                    int index = readText.FindIndex(x => x == "Band");
-                    for (int i = 0; i < index; i++)
-                    {
-                        Picture.Text += readText[i] + "\n";
-                        pins.Add(readText[i]);
-                    }
-                    foreach (String pin in pins)
-                    {
-                        readText.Remove(pin);
-                    }
-                    readText.Remove(readText[0]);
-                    pins.Clear();
-                    index = readText.FindIndex(x => x == "Chorus");
-                    for (int i = 0; i < index; i++)
-                    {
-                        pins.Add(readText[i]);
-                    }
-                    foreach (String pin in pins)
-                    {
-                        int pinNum = Convert.ToInt32(pin);
-                        int sindex = staters.FindIndex(x => x.Barcode == pinNum);
-                        staters[sindex].Band = true;
-                        readText.Remove(pin);
-                    }
-                    readText.Remove(readText[0]);
-                    pins.Clear();
-                    index = readText.FindIndex(x => x == "Talent");
-                    for (int i = 0; i < index; i++)
-                    {
-                        pins.Add(readText[i]);
-                    }
-                    foreach (String pin in pins)
-                    {
-                        int pinNum = Convert.ToInt32(pin);
-                        int sindex = staters.FindIndex(x => x.Barcode == pinNum);
-                        staters[sindex].Chorus = true;
-                        readText.Remove(pin);
-                    }
-                    readText.Remove(readText[0]);
-                    foreach (String pin in readText)
-                    {
-                        List<String> pieces = pin.Split(separators).ToList();
-                        int pinNum = Convert.ToInt32(pieces[0]);
-                        int sindex = staters.FindIndex(x => x.Barcode == pinNum);
-                        staters[sindex].Talent = true;
-                        staters[sindex].Act = pieces[1];
-                    }
-                    Picture.Focus();
-                    Picture.SelectionStart = Picture.Text.Length + 1;
+                List<String> readText = File.ReadAllLines(pathString, Encoding.UTF8).ToList();
+                List<String> pins = new List<string>();
+                programRunning = readText[0];
+                Object senders = new Object();
+                EventArgs k = new EventArgs();
+                char[] separators = new char[] { ' ', '\n', '$' };
+                switch (programRunning)
+                {
+                    case "City Photos":
+                        createSNPFromcsvToolStripMenuItem_Click(senders, k);
+                        readText.Remove(readText[0]);
+                        foreach (String pin in readText)
+                        {
+                            Picture.Text += pin + "\n";
+                        }
+                        Picture.Focus();
+                        Picture.SelectionStart = Picture.Text.Length + 1;
+                        SendKeys.Send("{ENTER}");
+                        break;
+                    case "Individual Stater Photos":
+                        loadSNPForStaterPhotosToolStripMenuItem_Click(senders, k);
+                        readText.Remove(readText[0]);
+                        foreach (String pin in readText)
+                        {
+                            Picture.Text += pin + "\n";
+                        }
+                        Picture.Focus();
+                        Picture.SelectionStart = Picture.Text.Length + 1;
+                        SendKeys.Send("{ENTER}");
+                        break;
+                    case "Stater Registration":
+                        loadSNPForActivitiesRegistrationToolStripMenuItem_Click(senders, k);
+                        readText.Remove(readText[0]);
+                        int index = readText.FindIndex(x => x == "Band");
+                        for (int i = 0; i < index; i++)
+                        {
+                            Picture.Text += readText[i] + "\n";
+                            pins.Add(readText[i]);
+                        }
+                        foreach (String pin in pins)
+                        {
+                            readText.Remove(pin);
+                        }
+                        readText.Remove(readText[0]);
+                        pins.Clear();
+                        index = readText.FindIndex(x => x == "Chorus");
+                        for (int i = 0; i < index; i++)
+                        {
+                            pins.Add(readText[i]);
+                        }
+                        foreach (String pin in pins)
+                        {
+                            int pinNum = Convert.ToInt32(pin);
+                            int sindex = staters.FindIndex(x => x.Barcode == pinNum);
+                            staters[sindex].Band = true;
+                            readText.Remove(pin);
+                        }
+                        readText.Remove(readText[0]);
+                        pins.Clear();
+                        index = readText.FindIndex(x => x == "Talent");
+                        for (int i = 0; i < index; i++)
+                        {
+                            pins.Add(readText[i]);
+                        }
+                        foreach (String pin in pins)
+                        {
+                            int pinNum = Convert.ToInt32(pin);
+                            int sindex = staters.FindIndex(x => x.Barcode == pinNum);
+                            staters[sindex].Chorus = true;
+                            readText.Remove(pin);
+                        }
+                        readText.Remove(readText[0]);
+                        foreach (String pin in readText)
+                        {
+                            List<String> pieces = pin.Split(separators).ToList();
+                            int pinNum = Convert.ToInt32(pieces[0]);
+                            int sindex = staters.FindIndex(x => x.Barcode == pinNum);
+                            staters[sindex].Talent = true;
+                            staters[sindex].Act = pieces[1];
+                        }
+                        Picture.Focus();
+                        Picture.SelectionStart = Picture.Text.Length + 1;
 
-                    SendKeys.Send("{ENTER}");
-                    break;
+                        SendKeys.Send("{ENTER}");
+                        break;
+                }
             }
         }
-
-        
-
     }
 }
