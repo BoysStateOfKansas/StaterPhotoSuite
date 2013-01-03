@@ -61,20 +61,7 @@ namespace StaterOrganizer
         //Exit function
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            bool run = true;
-            if (!workSaved)
-            {
-                if (MessageBox.Show("Are you sure you wish to exit without saving?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    run = true;
-                    workSaved = true;
-                }
-                else
-                {
-                    run = false;
-                }
-            }
-            if (run)
+            if (checkExitStatus())
             {
                 this.Dispose();
             }
@@ -408,20 +395,7 @@ namespace StaterOrganizer
         //Clears the current lists
         private void clearCurrentListToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            bool run = true;
-            if (!workSaved)
-            {
-                if (MessageBox.Show("Do you want to clear the list without saving?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    run = true;
-                    workSaved = true;
-                }
-                else
-                {
-                    run = false;
-                }
-            }
-            if (run)
+            if (checkClearStatus())
             {
                 b.Checked = false;
                 c.Checked = false;
@@ -436,20 +410,7 @@ namespace StaterOrganizer
         //Method to Load SNP for City Photos
         private void createSNPFromcsvToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            bool run = true;
-            if (!workSaved)
-            {
-                if (MessageBox.Show("Do you want to switch menus without saving?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    run = true;
-                    workSaved = true;
-                }
-                else
-                {
-                    run = false;
-                }
-            }
-            if (run)
+            if (checkSwitchStatus())
             {
                 Picture.Text = "";
                 listBox1.Items.Clear();
@@ -522,20 +483,7 @@ namespace StaterOrganizer
         //Method to load SNP for Stater Photos
         private void loadSNPForStaterPhotosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            bool run = true;
-            if (!workSaved)
-            {
-                if (MessageBox.Show("Do you want to switch menus without saving?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    run = true;
-                    workSaved = true;
-                }
-                else
-                {
-                    run = false;
-                }
-            }
-            if (run)
+            if (checkSwitchStatus())
             {
                 Picture.Text = "";
                 listBox1.Items.Clear();
@@ -577,20 +525,7 @@ namespace StaterOrganizer
         //Method to load SNP for Activities Registration
         private void loadSNPForActivitiesRegistrationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            bool run = true;
-            if (!workSaved)
-            {
-                if (MessageBox.Show("Do you want to switch menus without saving?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    run = true;
-                    workSaved = true;
-                }
-                else
-                {
-                    run = false;
-                }
-            }
-            if (run)
+            if (checkSwitchStatus())
             {
                 Picture.Text = "";
                 listBox1.Items.Clear();
@@ -1037,7 +972,7 @@ namespace StaterOrganizer
                 int lineIndex = Picture.GetLineFromCharIndex(cursorPosition);
                 for (int i = 0; i < Picture.Lines.Count(); i++)
                 {
-                    if (i == lineIndex+1)
+                    if (i == lineIndex + 1)
                     {
                         lines.Add("");
                     }
@@ -1048,7 +983,7 @@ namespace StaterOrganizer
                 {
                     Picture.Text += pin + "\n";
                 }
-                Picture.SelectionStart = cursorPosition+1;
+                Picture.SelectionStart = cursorPosition + 1;
             }
         }
 
@@ -1178,5 +1113,96 @@ namespace StaterOrganizer
                 }
             }
         }
+
+        //Check before exiting.
+        private bool checkExitStatus()
+        {
+            bool run = true;
+            if (!workSaved)
+            {
+                if (MessageBox.Show("Are you sure you wish to exit without saving?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    run = true;
+                    workSaved = true;
+                }
+                else
+                {
+                    run = false;
+                }
+            }
+            else
+            {
+                run = true;
+            }
+            return run;
+        }
+
+        //Check before clearing list.
+        private bool checkClearStatus()
+        {
+            bool run = true;
+            if (!workSaved)
+            {
+                if (MessageBox.Show("Do you want to clear the list without saving?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    run = true;
+                    workSaved = true;
+                }
+                else
+                {
+                    run = false;
+                }
+            }
+            else
+            {
+                run = true;
+            }
+            return run;
+        }
+
+        //Check before switching menus.
+        private bool checkSwitchStatus()
+        {
+            bool run = true;
+            if (!workSaved)
+            {
+                if (MessageBox.Show("Do you want to switch menus without saving?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    run = true;
+                    workSaved = true;
+                }
+                else
+                {
+                    run = false;
+                }
+            }
+            else
+            {
+                run = true;
+            }
+            return run;
+        }
+
+        //Manually updating the stater list.
+        private void manuallyLoadNewSNPCCToSystemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog of = new OpenFileDialog();
+            of.Filter ="csv files (*.csv)|*.csv";
+            string currentList = loadStaterList();
+            string newList = "";
+            string originalNewList = "";
+            if (of.ShowDialog() == DialogResult.OK)
+            {
+                newList = of.FileName;
+                originalNewList = newList;
+                string directory = Path.GetDirectoryName(of.FileName);
+                File.Move(newList, directory+"\\SNPCC.csv");
+                newList = directory + "\\SNPCC.csv";
+                File.Copy(newList, currentList, true);
+                File.Move(newList, originalNewList);
+            }
+
+        }
+
     }
 }

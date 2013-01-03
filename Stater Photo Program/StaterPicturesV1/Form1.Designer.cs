@@ -37,6 +37,7 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addStaterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addPinToListDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadBackupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearCurrentListToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.staterListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,7 +45,7 @@
             this.Picture = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.listBox1 = new System.Windows.Forms.ListBox();
-            this.addPinToListDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.manuallyLoadNewSNPCCToSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -115,8 +116,8 @@
             this.listToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addStaterToolStripMenuItem,
             this.addPinToListDownToolStripMenuItem,
-            this.loadBackupToolStripMenuItem,
-            this.clearCurrentListToolStripMenuItem1});
+            this.clearCurrentListToolStripMenuItem1,
+            this.loadBackupToolStripMenuItem});
             this.listToolStripMenuItem.Name = "listToolStripMenuItem";
             this.listToolStripMenuItem.Size = new System.Drawing.Size(82, 20);
             this.listToolStripMenuItem.Text = "List Options";
@@ -124,28 +125,36 @@
             // addStaterToolStripMenuItem
             // 
             this.addStaterToolStripMenuItem.Name = "addStaterToolStripMenuItem";
-            this.addStaterToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.addStaterToolStripMenuItem.Text = "Add Pin to list above";
+            this.addStaterToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.addStaterToolStripMenuItem.Text = "Add Pin to List Above";
             this.addStaterToolStripMenuItem.Click += new System.EventHandler(this.addStaterToolStripMenuItem_Click);
+            // 
+            // addPinToListDownToolStripMenuItem
+            // 
+            this.addPinToListDownToolStripMenuItem.Name = "addPinToListDownToolStripMenuItem";
+            this.addPinToListDownToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.addPinToListDownToolStripMenuItem.Text = "Add Pin to List Below";
+            this.addPinToListDownToolStripMenuItem.Click += new System.EventHandler(this.addPinToListDownToolStripMenuItem_Click);
             // 
             // loadBackupToolStripMenuItem
             // 
             this.loadBackupToolStripMenuItem.Name = "loadBackupToolStripMenuItem";
-            this.loadBackupToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.loadBackupToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.loadBackupToolStripMenuItem.Text = "Load Backup";
             this.loadBackupToolStripMenuItem.Click += new System.EventHandler(this.loadBackupToolStripMenuItem_Click);
             // 
             // clearCurrentListToolStripMenuItem1
             // 
             this.clearCurrentListToolStripMenuItem1.Name = "clearCurrentListToolStripMenuItem1";
-            this.clearCurrentListToolStripMenuItem1.Size = new System.Drawing.Size(185, 22);
+            this.clearCurrentListToolStripMenuItem1.Size = new System.Drawing.Size(183, 22);
             this.clearCurrentListToolStripMenuItem1.Text = "Clear Current List";
             this.clearCurrentListToolStripMenuItem1.Click += new System.EventHandler(this.clearCurrentListToolStripMenuItem_Click);
             // 
             // staterListToolStripMenuItem
             // 
             this.staterListToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addStaterToStaterListToolStripMenuItem});
+            this.addStaterToStaterListToolStripMenuItem,
+            this.manuallyLoadNewSNPCCToSystemToolStripMenuItem});
             this.staterListToolStripMenuItem.Name = "staterListToolStripMenuItem";
             this.staterListToolStripMenuItem.Size = new System.Drawing.Size(70, 20);
             this.staterListToolStripMenuItem.Text = "Stater List";
@@ -181,12 +190,12 @@
             this.listBox1.Size = new System.Drawing.Size(122, 173);
             this.listBox1.TabIndex = 6;
             // 
-            // addPinToListDownToolStripMenuItem
+            // manuallyLoadNewSNPCCToSystemToolStripMenuItem
             // 
-            this.addPinToListDownToolStripMenuItem.Name = "addPinToListDownToolStripMenuItem";
-            this.addPinToListDownToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.addPinToListDownToolStripMenuItem.Text = "Add Pin to list below";
-            this.addPinToListDownToolStripMenuItem.Click += new System.EventHandler(this.addPinToListDownToolStripMenuItem_Click);
+            this.manuallyLoadNewSNPCCToSystemToolStripMenuItem.Name = "manuallyLoadNewSNPCCToSystemToolStripMenuItem";
+            this.manuallyLoadNewSNPCCToSystemToolStripMenuItem.Size = new System.Drawing.Size(288, 22);
+            this.manuallyLoadNewSNPCCToSystemToolStripMenuItem.Text = "Manually Load New Stater List to System";
+            this.manuallyLoadNewSNPCCToSystemToolStripMenuItem.Click += new System.EventHandler(this.manuallyLoadNewSNPCCToSystemToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -229,6 +238,7 @@
         private System.Windows.Forms.ToolStripMenuItem addStaterToStaterListToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadBackupToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addPinToListDownToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem manuallyLoadNewSNPCCToSystemToolStripMenuItem;
     }
 
 }
