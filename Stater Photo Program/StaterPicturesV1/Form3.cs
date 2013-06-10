@@ -103,11 +103,6 @@ namespace StaterOrganizer
                 error.Text = "Pin cannot be empty.";
                 return false;
             }
-            else if (Convert.ToInt32(Pin.Text) < 1000)
-            {
-                error.Text = "The entered pin is an insufficent number.";
-                return false;
-            }
             else
             {
                 return true;

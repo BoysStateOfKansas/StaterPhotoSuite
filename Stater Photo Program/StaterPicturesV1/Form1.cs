@@ -460,7 +460,7 @@ namespace StaterOrganizer
                 csv.Close();
                 rows();
                 SNPhasBeenLoaded = true;
-                checkStaterList();
+                //checkStaterList();
                 if (error == false)
                 {
                     label1.Size = new Size(130, 30);
@@ -572,25 +572,25 @@ namespace StaterOrganizer
         private void rows()
         {
             staters.Add(new Stater("Row", "1"));
-            staters[staters.Count - 1].Barcode = 0001;
+            staters[staters.Count - 1].Barcode = 990001;
             staters.Add(new Stater("Row", "2"));
-            staters[staters.Count - 1].Barcode = 0002;
+            staters[staters.Count - 1].Barcode = 990002;
             staters.Add(new Stater("Row", "3"));
-            staters[staters.Count - 1].Barcode = 0003;
+            staters[staters.Count - 1].Barcode = 990003;
             staters.Add(new Stater("Row", "4"));
-            staters[staters.Count - 1].Barcode = 0004;
+            staters[staters.Count - 1].Barcode = 990004;
             staters.Add(new Stater("Row", "5"));
-            staters[staters.Count - 1].Barcode = 0005;
+            staters[staters.Count - 1].Barcode = 990005;
             staters.Add(new Stater("Row", "6"));
-            staters[staters.Count - 1].Barcode = 0006;
+            staters[staters.Count - 1].Barcode = 990006;
             staters.Add(new Stater("Row", "7"));
-            staters[staters.Count - 1].Barcode = 0007;
+            staters[staters.Count - 1].Barcode = 990007;
             staters.Add(new Stater("Row", "8"));
-            staters[staters.Count - 1].Barcode = 0008;
+            staters[staters.Count - 1].Barcode = 990008;
             staters.Add(new Stater("Row", "9"));
-            staters[staters.Count - 1].Barcode = 0009;
+            staters[staters.Count - 1].Barcode = 990009;
             staters.Add(new Stater("Row", "10"));
-            staters[staters.Count - 1].Barcode = 0010;
+            staters[staters.Count - 1].Barcode = 990010;
         }
 
         //Method to set up Check Boxes
